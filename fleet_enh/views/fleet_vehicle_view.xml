@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record model="ir.ui.view" id="fleet_vehicle_view_form_inherit">
+        <field name="name">fleet_vehicle_view_form_inherit</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='driver_id']" position="after">
+                <field name="vendor_id" />
+                <!-- <field name="customer_id" /> -->
+            </xpath>
+            <xpath expr="//div[@class='oe_button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="get_invoice"
+                    icon="fa-book">
+                    <field string="Invoice" name="ivoice_count" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="create_invoice" 
+                        string="CREATE INVOICE" 
+                        type="object" 
+                        attrs="{'invisible': [('active', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="fleet_vehicle_log_services_view_form_inherit">
+        <field name="name">fleet_vehicle_log_services_view_form_inherit</field>
+        <field name="model">fleet.vehicle.log.services</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_log_services_view_form"/>
+        <field name="arch" type="xml">
+            <field name="vendor_id" position="replace">
+                <field name="vendor_id"/>
+            </field>
+            <xpath expr="//field[@name='purchaser_id']" position="after">
+                <field name="customer_id" />
+                <field name="costing_type" />
+            </xpath> 
+            <xpath expr="//group[1]" position="after">
+                <group >
+                    <group string="الاوزان">
+                        <field name="load_weight"/>
+                        <field name="drop_weight" />
+                        <field name="axial_weight"/>
+                        <field name="car_weight"/>
+                        <field name="total_weight"/>
+                    </group>
+                     <group string="الخصومات">
+                        <field name="deduction_amnt" />
+                        <field name="leak_amnt"/>
+                    </group>
+                </group>
+            </xpath>            
+        </field>
+    </record>
+    
+    <record id="view_partner_form_inherit" model="ir.ui.view">
+        <field name="name">partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="get_services"
+                    icon="fa-truck">
+                    <field string="Services" name="services_count" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//notebook//page[@name='sales_purchases']" position="inside">
+                <group >
+                    <group string="Fleet">
+                        <field name="costing_type"/>
+                    </group>
+            </group>
+            </xpath>
+        </field>
+    </record>
+    
+    <menuitem action="contacts.action_contacts" parent="fleet.fleet_vehicles" name="Contacts"
+        id="fleet_vehicle_contacts_menu" groups="fleet.fleet_group_user" sequence="0"/>
+    
+</odoo>
