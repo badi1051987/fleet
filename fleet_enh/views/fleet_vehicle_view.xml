@@ -7,20 +7,14 @@
         <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='driver_id']" position="after">
-                <field name="vendor_id" />
-                <!-- <field name="customer_id" /> -->
+                <field name="vendor_id" domain="[('contact_type', '=', 'vendor')]"/>
+                <!-- <field name="customer_id" domain="[('contact_type', '=', 'customer')]"/> -->
             </xpath>
-            <xpath expr="//div[@class='oe_button_box']" position="inside">
-                <button class="oe_stat_button" type="object" name="get_invoice"
-                    icon="fa-book">
-                    <field string="Invoice" name="ivoice_count" widget="statinfo"/>
-                </button>
-            </xpath>
-            <xpath expr="//header" position="inside">
-                <button name="create_invoice" 
-                        string="CREATE INVOICE" 
-                        type="object" 
-                        attrs="{'invisible': [('active', '=', False)]}"/>
+            
+            <xpath expr="//field[@name='location']" position="after">
+                <field name="side_no" />
+                <field name="trailer_no" />
+                <field name="bon_no" />
             </xpath>
         </field>
     </record>
@@ -34,17 +28,21 @@
                 <field name="vendor_id"/>
             </field>
             <xpath expr="//field[@name='purchaser_id']" position="after">
+                <field name="display_name" readonly="1"/>
                 <field name="customer_id" />
                 <field name="costing_type" />
+                <field name="Consignment_no" />
+                <field name="service_no" />
             </xpath> 
             <xpath expr="//group[1]" position="after">
                 <group >
                     <group string="الاوزان">
                         <field name="load_weight"/>
-                        <field name="drop_weight" />
-                        <field name="axial_weight"/>
                         <field name="car_weight"/>
                         <field name="total_weight"/>
+                        <field name="drop_weight" />
+                        <field name="axial_weight"/>
+                        <field name="allow_total_weight"/>
                     </group>
                      <group string="الخصومات">
                         <field name="deduction_amnt" />
@@ -60,6 +58,18 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//form//sheet" position="before">
+                <header>
+                    <button name="call_wizard_vendor_bill" 
+                            string="فاتورة البائع" 
+                            type="object" 
+                            attrs="{'invisible': ['|',('active', '=', False),('contact_type', '=', 'customer')]}"/>
+                    <button name="call_wizard_invoice" 
+                            string="فاتورة الزبون" 
+                            type="object" 
+                            attrs="{'invisible': ['|',('active', '=', False),('contact_type', '=', 'vendor')]}"/>
+                </header>
+            </xpath>
             <xpath expr="//div[@class='oe_button_box']" position="inside">
                 <button class="oe_stat_button" type="object" name="get_services"
                     icon="fa-truck">
@@ -73,10 +83,53 @@
                     </group>
             </group>
             </xpath>
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="contact_type" />
+            </xpath> 
+        </field>
+    </record>
+    <record id="action_contacts_vendors" model="ir.actions.act_window">
+        <field name="name">Contacts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="context">{'default_is_company': True}</field>
+        <field name="domain">[('contact_type','=','vendor')]</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a Contact in your address book
+          </p><p>
+            Odoo helps you track all activities related to your contacts.
+          </p>
+        </field>
+    </record>
+    <record id="action_contacts_customers" model="ir.actions.act_window">
+        <field name="name">Contacts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="context">{'default_is_company': True}</field>
+        <field name="domain">[('contact_type','=','customer')]</field>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a Contact in your address book
+          </p><p>
+            Odoo helps you track all activities related to your contacts.
+          </p>
         </field>
     </record>
     
-    <menuitem action="contacts.action_contacts" parent="fleet.fleet_vehicles" name="Contacts"
-        id="fleet_vehicle_contacts_menu" groups="fleet.fleet_group_user" sequence="0"/>
-    
+    <menuitem action="action_contacts_vendors" parent="fleet.fleet_vehicles" name="شركة النقل"
+        id="fleet_vehicle_contacts_vendors_menu" groups="fleet.fleet_group_user" sequence="0"/>
+        
+    <menuitem action="action_contacts_customers" parent="fleet.fleet_vehicles" name="الزبائن"
+        id="fleet_vehicle_contacts_customers_menu" groups="fleet.fleet_group_user" sequence="0"/>
+        
+        
+        
+        
+        
+        
 </odoo>

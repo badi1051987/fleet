@@ -8,7 +8,10 @@
     'author': 'AB',
     'depends': ['base','fleet','account','contacts'],
     'data': [
-        'views/fleet_vehicle_view.xml'
+        'security/ir.model.access.csv',
+        'views/fleet_vehicle_view.xml',
+        'wizard/vendor_bill.xml',
+        'wizard/invoice_wizard_views.xml',
     ],
     'images': ['static/description/image.png'],
     'author': 'AB',

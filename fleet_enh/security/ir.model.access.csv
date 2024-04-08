@@ -1,4 +1,5 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+fleet_enh.access_fleet_trans,access_fleet_trans,fleet_enh.model_fleet_trans,base.group_user,1,1,1,1
 
 
 

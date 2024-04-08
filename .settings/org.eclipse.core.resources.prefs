@@ -1,2 +1,4 @@
 eclipse.preferences.version=1
 encoding//fleet_enh/__init__.py=utf-8
+encoding//fleet_enh/wizard/__init__.py=utf-8
+encoding//fleet_enh/wizard/wizard.py=utf-8
